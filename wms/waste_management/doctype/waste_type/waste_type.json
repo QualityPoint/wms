@@ -1,25 +1,26 @@
 {
  "actions": [],
- "creation": "2025-10-08 20:48:13.393073",
+ "allow_import": 1,
+ "creation": "2025-10-09 11:14:56.314488",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "disable",
-  "activity_name",
-  "activity_code",
+  "waste_type",
+  "waste_type_code",
   "is_group",
-  "column_break_hjdx",
-  "parent_commercial_activity",
-  "activity_description_section",
+  "column_break_fmoe",
+  "parent_waste_type",
+  "description_section",
   "description",
-  "section_break_madp",
+  "section_break_omx9",
   "lft",
   "rgt",
   "old_parent"
  ],
  "fields": [
   {
-   "fieldname": "section_break_madp",
+   "fieldname": "section_break_omx9",
    "fieldtype": "Section Break"
   },
   {
@@ -50,36 +51,20 @@
    "fieldtype": "Link",
    "hidden": 1,
    "label": "Old Parent",
-   "options": "Commercial Activity",
+   "options": "Waste Type",
    "read_only": 1
   },
   {
-   "fieldname": "parent_commercial_activity",
+   "fieldname": "parent_waste_type",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
-   "label": "Parent Commercial Activity",
-   "options": "Commercial Activity",
+   "label": "Parent Waste Type",
+   "options": "Waste Type",
    "reqd": 1
   },
   {
-   "fieldname": "column_break_hjdx",
+   "fieldname": "column_break_fmoe",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "activity_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Activity Name",
-   "no_copy": 1,
-   "reqd": 1
-  },
-  {
-   "fieldname": "activity_code",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Activity Code",
-   "no_copy": 1
   },
   {
    "default": "0",
@@ -89,9 +74,25 @@
    "no_copy": 1
   },
   {
-   "fieldname": "activity_description_section",
+   "fieldname": "waste_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Waste Type",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "waste_type_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Waste Type Code",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "description_section",
    "fieldtype": "Section Break",
-   "label": "Activity Description"
+   "label": "Description"
   },
   {
    "fieldname": "description",
@@ -103,11 +104,11 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-10-09 11:23:29.239240",
+ "modified": "2025-10-09 11:24:58.694106",
  "modified_by": "Administrator",
  "module": "Waste Management",
- "name": "Commercial Activity",
- "nsm_parent_field": "parent_commercial_activity",
+ "name": "Waste Type",
+ "nsm_parent_field": "parent_waste_type",
  "owner": "Administrator",
  "permissions": [
   {
@@ -125,7 +126,7 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "search_fields": "activity_code,description",
+ "search_fields": "waste_type_code",
  "show_name_in_global_search": 1,
  "sort_field": "modified",
  "sort_order": "DESC",

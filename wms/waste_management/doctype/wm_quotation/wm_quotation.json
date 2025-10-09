@@ -1,0 +1,328 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-10-09 13:23:41.858798",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "naming_series",
+  "quotation_to",
+  "party_name",
+  "customer_name",
+  "column_break_onzr",
+  "transaction_date",
+  "valid_till",
+  "column_break_zdku",
+  "company",
+  "contract_type",
+  "amended_from",
+  "waste_selections_section",
+  "waste_selections",
+  "address_and_contact_tab",
+  "billing_address_section",
+  "customer_address",
+  "address_display",
+  "column_break_pucb",
+  "contact_person",
+  "contact_display",
+  "contact_mobile",
+  "contact_email",
+  "location_address_section",
+  "project_address_name",
+  "column_break_esfw",
+  "project_address",
+  "company_address_section",
+  "company_address",
+  "company_address_display",
+  "column_break_liir",
+  "company_contact_person",
+  "terms_tab",
+  "terms_section_break",
+  "tc_name",
+  "terms"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "WM Quotation",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title",
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "column_break_onzr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "WMS-QTN-.YYYY.-",
+   "print_hide": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "default": "Customer",
+   "fieldname": "quotation_to",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Quotation To",
+   "options": "DocType",
+   "print_hide": 1,
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "party_name",
+   "fieldtype": "Dynamic Link",
+   "in_global_search": 1,
+   "in_standard_filter": 1,
+   "label": "Party",
+   "options": "quotation_to",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "transaction_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date",
+   "no_copy": 1,
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "valid_till",
+   "fieldtype": "Date",
+   "label": "Valid Till"
+  },
+  {
+   "fieldname": "column_break_zdku",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "print_hide": 1,
+   "remember_last_selected_value": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "waste_selections_section",
+   "fieldtype": "Section Break",
+   "label": "Waste Selections"
+  },
+  {
+   "fieldname": "waste_selections",
+   "fieldtype": "Table",
+   "label": "Waste Selections",
+   "options": "Waste Selections",
+   "reqd": 1
+  },
+  {
+   "default": "Commercial",
+   "fieldname": "contract_type",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Contract Type",
+   "no_copy": 1,
+   "options": "\nIndividuals\nCommercial",
+   "reqd": 1
+  },
+  {
+   "fieldname": "address_and_contact_tab",
+   "fieldtype": "Tab Break",
+   "label": "Address & Contact"
+  },
+  {
+   "fieldname": "customer_address",
+   "fieldtype": "Link",
+   "label": "Customer Address",
+   "options": "Address",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "address_display",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pucb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contact_person",
+   "fieldtype": "Link",
+   "label": "Contact Person",
+   "options": "Contact",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "contact_display",
+   "fieldtype": "Small Text",
+   "in_global_search": 1,
+   "label": "Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact_mobile",
+   "fieldtype": "Small Text",
+   "label": "Mobile No",
+   "options": "Phone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Contact Email",
+   "options": "Email",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "billing_address_section",
+   "fieldtype": "Section Break",
+   "label": "Billing Address",
+   "options": "fa fa-bullhorn"
+  },
+  {
+   "fieldname": "location_address_section",
+   "fieldtype": "Section Break",
+   "label": "Location Address"
+  },
+  {
+   "fieldname": "project_address_name",
+   "fieldtype": "Link",
+   "label": "Project Address",
+   "options": "Address",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "column_break_esfw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "project_address",
+   "fieldtype": "Small Text",
+   "label": "Project Address",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_address_section",
+   "fieldtype": "Section Break",
+   "label": "Company Address"
+  },
+  {
+   "fieldname": "company_address",
+   "fieldtype": "Link",
+   "label": "Company Address Name",
+   "options": "Address"
+  },
+  {
+   "fieldname": "company_address_display",
+   "fieldtype": "Small Text",
+   "label": "Company Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_liir",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company_contact_person",
+   "fieldtype": "Link",
+   "label": "Company Contact Person",
+   "options": "Contact",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "terms_tab",
+   "fieldtype": "Tab Break",
+   "label": "Terms"
+  },
+  {
+   "fieldname": "terms_section_break",
+   "fieldtype": "Section Break",
+   "label": "Terms and Conditions"
+  },
+  {
+   "fieldname": "tc_name",
+   "fieldtype": "Link",
+   "label": "Terms",
+   "options": "Terms and Conditions",
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "terms",
+   "fieldtype": "Text Editor",
+   "label": "Term Details"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-09 15:02:54.514308",
+ "modified_by": "Administrator",
+ "module": "Waste Management",
+ "name": "WM Quotation",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "transaction_date,party_name,contract_type",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "timeline_field": "party_name"
+}
