@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-09 13:18:10.888285",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "waste_type",
+  "column_break_tvlm",
+  "collection_times",
+  "collection_periodicity",
+  "preferred_time",
+  "containers_section",
+  "container_type",
+  "column_break_gmmn"
+ ],
+ "fields": [
+  {
+   "fieldname": "waste_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Waste Type",
+   "options": "Waste Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_tvlm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Weekly",
+   "fieldname": "collection_periodicity",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Collection Periodicity",
+   "options": "\nDaily\nWeekly\nMonthly\nAnnually",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "collection_times",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Collection Times",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "preferred_time",
+   "fieldtype": "Time",
+   "label": "Preferred Collection Time"
+  },
+  {
+   "fieldname": "containers_section",
+   "fieldtype": "Section Break",
+   "label": "Containers"
+  },
+  {
+   "fieldname": "container_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Container Type",
+   "options": "Container",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_gmmn",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-10-09 15:04:01.868772",
+ "modified_by": "Administrator",
+ "module": "Waste Management",
+ "name": "Waste Selections",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
