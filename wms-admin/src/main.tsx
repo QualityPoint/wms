@@ -7,6 +7,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import ProtectedRoute from './routes/ProtectedRoutes.tsx'
 import Login from './pages/auth/Login.tsx'
 import Dashboard from './pages/dashboard/Dashboard.tsx'
+import { Toaster } from 'sonner'
 
 const router = createBrowserRouter([
 	{
@@ -36,5 +37,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RouterProvider router={router}/>
+    <Toaster />
   </StrictMode>,
 )

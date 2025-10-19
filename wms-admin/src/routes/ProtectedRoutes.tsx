@@ -1,14 +1,13 @@
 import { Navigate } from "react-router-dom";
-import { useAppState } from "../../overmind";
+import { useFrappeAuth } from "frappe-react-sdk";
 
 
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAppState()
-//   console.log(user)
-//  if (!user?.loggedIn) {
-//    return (<Navigate to="/login" replace />);
-//  }
- 
+  const { currentUser, isLoading } = useFrappeAuth()
+  if (!currentUser && !isLoading) {
+    return (<Navigate to="/login" replace />);
+  }
+
   return children;
 };
 
