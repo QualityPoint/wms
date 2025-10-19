@@ -243,4 +243,4 @@ app_license = "agpl-3.0"
 # }
 
 
-website_route_rules = [{'from_route': '/wms-fe/<path:app_path>', 'to_route': 'wms-fe'},]
+website_route_rules = [{'from_route': '/wms-admin/<path:app_path>', 'to_route': 'wms-admin'},]
