@@ -1,11 +1,11 @@
-import { useSortable } from "@dnd-kit/sortable"
-import { Button } from "@/components/ui/button"
-import { IconGripVertical } from "@tabler/icons-react"
+import { Button } from "@/components/ui/button";
+import { useSortable } from "@dnd-kit/sortable";
+import { IconGripVertical } from "@tabler/icons-react";
 
 export function DragHandle({ id }: { id: number }) {
   const { attributes, listeners } = useSortable({
     id,
-  })
+  });
 
   return (
     <Button
@@ -18,5 +18,5 @@ export function DragHandle({ id }: { id: number }) {
       <IconGripVertical className="text-muted-foreground size-3" />
       <span className="sr-only">Drag to reorder</span>
     </Button>
-  )
+  );
 }

@@ -1,15 +1,19 @@
-import { TableCell, TableRow } from "./ui/table"
-import { flexRender } from "@tanstack/react-table"
-import { useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
-import { z } from "zod"
-import type { schema } from "./data-table"
-import type { Row } from "@tanstack/react-table"
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import type { Row } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
+import { z } from "zod";
+import type { userSchema } from "../schema/users-schema";
+import { TableCell, TableRow } from "./ui/table";
 
-export function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
+export function DraggableRow({
+  row,
+}: {
+  row: Row<z.infer<typeof userSchema>>;
+}) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id,
-  })
+    id: row.original.name,
+  });
 
   return (
     <TableRow
@@ -28,5 +32,5 @@ export function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
         </TableCell>
       ))}
     </TableRow>
-  )
+  );
 }
