@@ -1,29 +1,37 @@
-import { GalleryVerticalEnd, Loader2 } from "lucide-react"
+import { GalleryVerticalEnd, Loader2 } from "lucide-react";
 
-import { LoginForm } from "@/components/login-form"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useFrappeAuth } from "frappe-react-sdk"
-import { toast } from "sonner"
+import { LoginForm } from "@/components/login-form";
+import { useFrappeAuth } from "frappe-react-sdk";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useFrappeAuth();
+  const { login, currentUser } = useFrappeAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard");
+    }
+  }, [currentUser]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    login({ username, password }).then(() => {
-      navigate('/dashboard');
-    }).catch((err) => {
-      toast.error(err.message)
-    }).finally(() => {
-      setLoading(false);
-    });
-
+    login({ username, password })
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -35,10 +43,20 @@ export default function LoginPage() {
           </div>
           Acme Inc.
         </a>
-        {loading ? <div className="flex items-center justify-center">
-          <Loader2 className="size-4 animate-spin" />
-        </div> : <LoginForm onSubmit={handleSubmit} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />}
+        {loading ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="size-4 animate-spin" />
+          </div>
+        ) : (
+          <LoginForm
+            onSubmit={handleSubmit}
+            username={username}
+            password={password}
+            setUsername={setUsername}
+            setPassword={setPassword}
+          />
+        )}
       </div>
     </div>
-  )
+  );
 }

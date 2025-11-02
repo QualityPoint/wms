@@ -8,17 +8,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IconDotsVertical } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { TableCellViewer } from "../components/table-cell-viewer";
+import { useFrappeDeleteDoc, useSWRConfig } from "frappe-react-sdk";
+import { CreateUser } from "../components/create-user";
+import { EditUserDetails } from "../components/edit-user-details";
 import { Button } from "../components/ui/button";
 import type { User } from "../types/Core/User";
 
-export const usersColumnsGenerator = (
-  submitRowData: (item: User) => void
-): ColumnDef<User>[] => [
+export const usersColumnsGenerator = (): ColumnDef<User>[] => [
   {
     id: "drag",
     header: () => null,
-    cell: ({ cell }) => <DragHandle id={cell.row.index} />,
+    cell: ({ row }) => {
+      return <DragHandle id={row.index + 1} />;
+    },
   },
   {
     id: "select",
@@ -49,14 +51,7 @@ export const usersColumnsGenerator = (
   {
     accessorKey: "name",
     header: "ID",
-    cell: ({ row }) => {
-      return (
-        <TableCellViewer
-          onSubmitRowData={(item: User) => submitRowData(item)}
-          item={row.original}
-        />
-      );
-    },
+    cell: ({ row }) => <div>{row.original.name}</div>,
     enableHiding: false,
   },
   {
@@ -81,28 +76,39 @@ export const usersColumnsGenerator = (
   },
   {
     id: "actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem
-            variant="destructive"
-            className="cursor-pointer"
-            onClick={() => {}}
-          >
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    cell: ({ row }) => {
+      const { deleteDoc } = useFrappeDeleteDoc();
+      const { mutate: globalMutate } = useSWRConfig();
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+              size="icon"
+            >
+              <IconDotsVertical />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-32">
+            <DropdownMenuItem
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={() =>
+                deleteDoc("User", row.original.name).then(() =>
+                  globalMutate("users_list")
+                )
+              }
+            >
+              Delete
+            </DropdownMenuItem>
+            <EditUserDetails item={row.original} />
+            <CreateUser />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

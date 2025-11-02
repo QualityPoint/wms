@@ -15,6 +15,8 @@ export function DraggableRow({
     id: row.original.name,
   });
 
+  console.log(row, "from draggable-row");
+
   return (
     <TableRow
       data-state={row.getIsSelected() && "selected"}

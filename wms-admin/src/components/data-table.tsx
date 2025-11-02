@@ -57,6 +57,12 @@ export function DataTable({
   tableColumns: ColumnDef<z.infer<typeof userSchema>>[];
 }) {
   const [data, setData] = React.useState(() => initialData);
+  console.log(data, "from data-table");
+
+  React.useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
