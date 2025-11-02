@@ -1,17 +1,4 @@
 import {
-  closestCenter,
-  DndContext,
-  type DragEndEvent,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  type UniqueIdentifier,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { arrayMove } from "@dnd-kit/sortable";
-import {
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
@@ -57,7 +44,6 @@ export function DataTable({
   tableColumns: ColumnDef<z.infer<typeof userSchema>>[];
 }) {
   const [data, setData] = React.useState(() => initialData);
-  console.log(data, "from data-table");
 
   React.useEffect(() => {
     setData(initialData);
@@ -74,17 +60,6 @@ export function DataTable({
     pageIndex: 0,
     pageSize: 10,
   });
-  const sortableId = React.useId();
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {})
-  );
-
-  const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ name }) => name) || [],
-    [data]
-  );
 
   const table = useReactTable({
     data,
@@ -110,17 +85,6 @@ export function DataTable({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
-        return arrayMove(data, oldIndex, newIndex);
-      });
-    }
-  }
 
   return (
     <Tabs
@@ -156,19 +120,7 @@ export function DataTable({
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
       >
         <div className="overflow-hidden rounded-lg border">
-          <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis]}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
-            id={sortableId}
-          >
-            <CustomTable
-              dataIds={dataIds}
-              columns={tableColumns}
-              table={table}
-            />
-          </DndContext>
+          <CustomTable columns={tableColumns} table={table} />
         </div>
         <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">

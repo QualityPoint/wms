@@ -1,4 +1,3 @@
-import { DragHandle } from "@/components/drag-handle";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -15,13 +14,6 @@ import { Button } from "../components/ui/button";
 import type { User } from "../types/Core/User";
 
 export const usersColumnsGenerator = (): ColumnDef<User>[] => [
-  {
-    id: "drag",
-    header: () => null,
-    cell: ({ row }) => {
-      return <DragHandle id={row.index + 1} />;
-    },
-  },
   {
     id: "select",
     header: ({ table }) => (

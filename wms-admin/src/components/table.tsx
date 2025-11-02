@@ -1,9 +1,5 @@
-import type { UniqueIdentifier } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import type {
+  Cell,
   ColumnDef,
   Header,
   HeaderGroup,
@@ -12,7 +8,6 @@ import type {
 } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 import type { User } from "../types/Core/User";
-import { DraggableRow } from "./draggable-row";
 import {
   Table,
   TableBody,
@@ -24,21 +19,11 @@ import {
 
 export function CustomTable({
   table,
-  dataIds,
   columns,
 }: {
   table: TTable<User>;
-  dataIds: UniqueIdentifier[];
   columns: ColumnDef<User>[];
 }) {
-  console.log(
-    table.initialState,
-    dataIds,
-    columns,
-    "from table",
-    "dataIds",
-    "columns"
-  );
   return (
     <Table>
       <TableHeader className="bg-muted sticky top-0 z-10">
@@ -61,14 +46,15 @@ export function CustomTable({
       </TableHeader>
       <TableBody className="**:data-[slot=table-cell]:first:w-8">
         {table.getRowModel().rows?.length ? (
-          <SortableContext
-            items={dataIds}
-            strategy={verticalListSortingStrategy}
-          >
-            {table.getRowModel().rows.map((row: Row<User>) => (
-              <DraggableRow key={`${row.original.name}-${row.id}`} row={row} />
-            ))}
-          </SortableContext>
+          table.getRowModel().rows.map((row: Row<User>) => (
+            <TableRow key={`${row.original.name}-${row.id}`}>
+              {row.getVisibleCells().map((cell: Cell<User, unknown>) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">

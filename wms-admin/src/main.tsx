@@ -1,42 +1,54 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './App.css'
-import App from './App.tsx'
-import { RouterProvider } from 'react-router-dom'
-import { createBrowserRouter, Navigate } from 'react-router-dom'
-import ProtectedRoute from './routes/ProtectedRoutes.tsx'
-import Login from './pages/auth/Login.tsx'
-import Dashboard from './pages/dashboard/Dashboard.tsx'
-import { Toaster } from 'sonner'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import { Toaster } from "sonner";
+import "./App.css";
+import App from "./App.tsx";
+import Login from "./pages/auth/Login.tsx";
+import Dashboard from "./pages/dashboard/Dashboard.tsx";
+import Operations from "./pages/operations/Operations.tsx";
+import ProtectedRoute from "./routes/ProtectedRoutes.tsx";
 
 const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <App />,
-    children: 
-      [
-        {
-          index: true,
-          element: <Navigate to="login" replace />,
-        },
-        {
-          path: 'login',
-          element: <Login />,
-        },
-        {
-          path: 'dashboard',
-          element: 
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="login" replace />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "dashboard",
+        element: (
           <ProtectedRoute>
             <Dashboard />
-          </ProtectedRoute>,
-        }
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "operations",
+        element: (
+          <ProtectedRoute>
+            <Operations />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
     <Toaster />
-  </StrictMode>,
-)
+  </StrictMode>
+);
