@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 
+import { useFrappeAuth } from "frappe-react-sdk";
+
 const data = {
   user: {
     name: "shadcn",
@@ -132,6 +134,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { currentUser } = useFrappeAuth();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -155,7 +159,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            name: currentUser || "",
+            email: currentUser || "",
+            avatar: "/avatars/shadcn.jpg",
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   );
