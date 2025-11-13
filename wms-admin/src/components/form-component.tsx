@@ -13,6 +13,7 @@ export type FormField = {
     | "email"
     | "password"
     | "number"
+    | "tel"
     | "select"
     | "checkbox"
     | "textarea";

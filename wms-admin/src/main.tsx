@@ -9,7 +9,9 @@ import { Toaster } from "sonner";
 import "./App.css";
 import App from "./App.tsx";
 import Login from "./pages/auth/Login.tsx";
-import Dashboard from "./pages/dashboard/Dashboard.tsx";
+import Contacts from "./pages/contacts/Contacts.tsx";
+import Customers from "./pages/customers/Customers.tsx";
+import Leads from "./pages/leads/Leads.tsx";
 import Operations from "./pages/operations/Operations.tsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.tsx";
 
@@ -27,10 +29,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "dashboard",
+        path: "contacts",
         element: (
           <ProtectedRoute>
-            <Dashboard />
+            <Contacts />
           </ProtectedRoute>
         ),
       },
@@ -39,6 +41,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Operations />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "leads",
+        element: (
+          <ProtectedRoute>
+            <Leads />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "customers",
+        element: (
+          <ProtectedRoute>
+            <Customers />
           </ProtectedRoute>
         ),
       },

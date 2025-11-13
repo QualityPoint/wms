@@ -8,12 +8,26 @@ import {
 import { IconDotsVertical } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useFrappeDeleteDoc, useSWRConfig } from "frappe-react-sdk";
-import { CreateUser } from "../components/create-user";
+import { z } from "zod";
 import { EditUserDetails } from "../components/edit-user-details";
+import type { FormField } from "../components/form-component";
 import { Button } from "../components/ui/button";
-import type { User } from "../types/Core/User";
 
-export const usersColumnsGenerator = (): ColumnDef<User>[] => [
+const createFieldsFromData = <T extends object>(data: T[]) => {
+  return Object.keys(data[0] || {}).map((key) => ({
+    accessorKey: key,
+    header: key,
+  }));
+};
+
+export const usersColumnsGenerator = <T extends object>(
+  data: T[],
+  cacheKey: string,
+  docType: string,
+  idField: string,
+  formSchema: z.ZodType<T>,
+  formFields: FormField[]
+): ColumnDef<T>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -41,31 +55,21 @@ export const usersColumnsGenerator = (): ColumnDef<User>[] => [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: idField,
     header: "ID",
-    cell: ({ row }) => <div>{row.original.name}</div>,
+    cell: ({ row }) => (
+      <EditUserDetails<T>
+        item={row.original}
+        docType={docType}
+        formSchema={formSchema}
+        keycolumn={idField}
+        cacheKey={cacheKey}
+        formFields={formFields}
+      />
+    ),
     enableHiding: false,
   },
-  {
-    accessorKey: "user_type",
-    header: "User Type",
-    cell: ({ row }) => <div>{row.original.user_type}</div>,
-  },
-  {
-    accessorKey: "enabled",
-    header: "Enabled",
-    cell: ({ row }) => <div>{row.original.enabled}</div>,
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => <div>{row.original.email}</div>,
-  },
-  {
-    accessorKey: "full_name",
-    header: "Full Name",
-    cell: ({ row }) => <div>{row.original.full_name}</div>,
-  },
+  ...createFieldsFromData(data),
   {
     id: "actions",
     cell: ({ row }) => {
@@ -89,15 +93,13 @@ export const usersColumnsGenerator = (): ColumnDef<User>[] => [
               variant="destructive"
               className="cursor-pointer"
               onClick={() =>
-                deleteDoc("User", row.original.name).then(() =>
-                  globalMutate("users_list")
+                deleteDoc(docType, (row.original as any)?.[idField]).then(() =>
+                  globalMutate(cacheKey)
                 )
               }
             >
               Delete
             </DropdownMenuItem>
-            <EditUserDetails item={row.original} />
-            <CreateUser />
           </DropdownMenuContent>
         </DropdownMenu>
       );

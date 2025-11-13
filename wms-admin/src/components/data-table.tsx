@@ -19,7 +19,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
-import { z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,16 +31,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { userSchema } from "../schema/users-schema";
 import { DropdownMenuComponent } from "./dropdown";
 import { CustomTable } from "./table";
 
-export function DataTable({
+export function DataTable<T extends object>({
   data: initialData,
   tableColumns,
+  keyColumn,
 }: {
-  data: z.infer<typeof userSchema>[];
-  tableColumns: ColumnDef<z.infer<typeof userSchema>>[];
+  data: T[];
+  tableColumns: ColumnDef<T>[];
+  keyColumn: string;
 }) {
   const [data, setData] = React.useState(() => initialData);
 
@@ -71,7 +71,7 @@ export function DataTable({
       columnFilters,
       pagination,
     },
-    getRowId: (row) => row.name.toString(),
+    getRowId: (row) => row[keyColumn as keyof T]?.toString() || "",
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -120,7 +120,7 @@ export function DataTable({
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
       >
         <div className="overflow-hidden rounded-lg border">
-          <CustomTable columns={tableColumns} table={table} />
+          <CustomTable columns={tableColumns} table={table} keyColumn="name" />
         </div>
         <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">

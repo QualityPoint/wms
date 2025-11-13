@@ -3,106 +3,66 @@ import { z } from "zod";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import { useFrappeUpdateDoc, useSWRConfig } from "frappe-react-sdk";
-import { useForm } from "react-hook-form";
-import { userSchema } from "../schema/users-schema";
+import { useForm, type DefaultValues } from "react-hook-form";
 import type { User } from "../types/Core/User";
 import { Form, type FormField } from "./form-component";
 import { Button } from "./ui/button";
+
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "./ui/drawer";
 
-export function EditUserDetails({
+export function EditUserDetails<T extends object>({
   item,
+  docType,
+  formSchema,
+  keycolumn,
+  cacheKey,
+  formFields,
 }: {
-  item: z.infer<typeof userSchema>;
+  item: T;
+  docType: string;
+  formSchema: z.ZodType<T>;
+  keycolumn: string;
+  cacheKey: string;
+  formFields: FormField[];
 }) {
   const isMobile = useIsMobile();
 
-  const UserForm = useForm<z.infer<typeof userSchema>>({
-    defaultValues: {
-      name: item.name,
-      first_name: item.first_name,
-      last_name: item.last_name,
-      user_type: item.user_type,
-      enabled: item.enabled,
-    },
-  });
+  // Create default values by mapping schema shape to item values
+  const defaultValues = (
+    formSchema instanceof z.ZodObject
+      ? Object.fromEntries(
+          Object.entries(formSchema.shape).map(([key]) => [
+            key,
+            item[key as keyof T] ?? "",
+          ])
+        )
+      : {}
+  ) as DefaultValues<z.infer<typeof formSchema>>;
 
-  const formFields: FormField[] = [
-    {
-      name: "last_name",
-      label: "Last Name",
-      type: "text",
-      placeholder: "Doe",
-      autoComplete: "name",
-    },
-    {
-      name: "first_name",
-      label: "First Name",
-      type: "text",
-      placeholder: "John",
-      autoComplete: "name",
-    },
-    {
-      name: "user_type",
-      label: "User Type",
-      type: "select",
-      options: [
-        {
-          value: item.user_type || "",
-          label: item.user_type || "Select user type",
-          defaultChecked: true,
-        },
-        ...(item.user_type !== "Website User"
-          ? [{ value: "Website User", label: "Website User" }]
-          : []),
-        ...(item.user_type !== "System User"
-          ? [{ value: "System User", label: "System User" }]
-          : []),
-      ],
-    },
-    {
-      name: "enabled",
-      label: "Account Enabled",
-      type: "checkbox",
-      checkBoxesInitialValue: item.enabled,
-    },
-  ];
+  const UserForm = useForm<z.infer<typeof formSchema>>({
+    defaultValues,
+  });
 
   const { updateDoc } = useFrappeUpdateDoc<User>();
 
   const { mutate: globalMutate } = useSWRConfig();
 
-  const onSubmitRowData = (formDataToUpdate: z.infer<typeof userSchema>) => {
-    const {
-      name,
-      email,
-      first_name,
-      last_name,
-      full_name,
-      enabled,
-      user_type,
-    } = formDataToUpdate;
-
-    updateDoc("User", name, {
-      name,
-      email,
-      first_name,
-      last_name,
-      full_name,
-      enabled,
-      user_type,
+  const onSubmitRowData = (formDataToUpdate: z.infer<typeof formSchema>) => {
+    updateDoc(docType, item[keycolumn as keyof T] as string, {
+      ...formSchema.parse(formDataToUpdate),
     })
       .then(() => {
-        console.log(`User ${name} updated successfully`);
-        globalMutate("users_list");
+        console.log(`User ${item[keycolumn as keyof T]} updated successfully`);
+        globalMutate(cacheKey);
       })
       .catch((error) => {
         console.error("Error updating user:", error);
@@ -115,14 +75,21 @@ export function EditUserDetails({
         <DrawerTrigger asChild>
           <Button
             variant="link"
-            className="wrap-anywhere line-clamp-2 break-all h-auto text-ellipsis text-foreground w-fit px-0 whitespace-normal text-left"
+            className="wrap-anywhere line-clamp-2 break-all h-auto text-ellipsis text-foreground w-fit px-0"
           >
-            Edit {item.name}
+            <>{item[keycolumn as keyof T]}</>
           </Button>
         </DrawerTrigger>
+        <DrawerDescription>
+          {
+            // This is to avoid user aria label console warning
+          }
+        </DrawerDescription>
         <DrawerContent>
           <DrawerHeader className="gap-1">
-            <DrawerTitle>Edit User {item.name}</DrawerTitle>
+            <DrawerTitle>
+              Edit User <>{item[keycolumn as keyof T]}</>
+            </DrawerTitle>
           </DrawerHeader>
           <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
             <Form

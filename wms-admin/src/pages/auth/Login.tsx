@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/dashboard");
+      navigate("/contacts");
     }
   }, [currentUser]);
 
@@ -24,7 +24,7 @@ export default function LoginPage() {
     setLoading(true);
     login({ username, password })
       .then(() => {
-        navigate("/dashboard");
+        navigate("/contacts");
       })
       .catch((err) => {
         toast.error(err.message);

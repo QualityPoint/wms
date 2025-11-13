@@ -8,77 +8,99 @@ import { userSchema } from "../schema/users-schema";
 import type { User } from "../types/Core/User";
 import { Form } from "./form-component";
 import { Button } from "./ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./ui/drawer";
 
 export function CreateUser({}: {}) {
   const isMobile = useIsMobile();
 
   const UserForm = useForm<z.infer<typeof userSchema>>({
     defaultValues: {
-      name: "",
-      email: "",
-      creation: "",
-      modified: "",
-      owner: "",
-      docstatus: 0,
       first_name: "",
       last_name: "",
-      full_name: "",
+      email: "",
+      mobile_no: "",
+      new_password: "",
     },
   });
 
   const formFields = [
     {
-      name: "email",
-      label: "Email",
-      type: "email" as const,
-      placeholder: "user@example.com",
-      required: true,
-      validation: {
-        required: "Email is required",
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: "Invalid email address",
-        },
-      },
-      autoComplete: "email",
-    },
-    {
       name: "first_name",
       label: "First Name",
       type: "text" as const,
-      placeholder: "John",
-      autoComplete: "name",
+      placeholder: "Enter first name",
+      required: true,
+      validation: {
+        required: "First name is required",
+        minLength: {
+          value: 2,
+          message: "First name must be at least 2 characters",
+        },
+      },
+      autoComplete: "given-name",
     },
     {
       name: "last_name",
       label: "Last Name",
       type: "text" as const,
-      placeholder: "Doe",
-      autoComplete: "name",
+      placeholder: "Enter last name",
+      required: true,
+      validation: {
+        required: "Last name is required",
+        minLength: {
+          value: 2,
+          message: "Last name must be at least 2 characters",
+        },
+      },
+      autoComplete: "family-name",
     },
     {
-      name: "user_type",
-      label: "User Type",
-      type: "select" as const,
-      options: [
-        { value: "", label: "Select User Type" },
-        { value: "Website User", label: "Website User" },
-        { value: "System User", label: "System User" },
-      ],
+      name: "email",
+      label: "Email",
+      type: "email" as const,
+      placeholder: "Enter email address",
+      required: true,
+      validation: {
+        required: "Email is required",
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: "Please enter a valid email address",
+        },
+      },
+      autoComplete: "email",
     },
     {
-      name: "enabled",
-      label: "Account Enabled",
-      type: "checkbox" as const,
+      name: "mobile_no",
+      label: "Mobile No",
+      type: "tel" as const,
+      placeholder: "Enter mobile number",
+      required: true,
+      validation: {
+        required: "Mobile number is required",
+        pattern: {
+          value: /^[0-9\-+\s()]*$/,
+          message: "Please enter a valid mobile number",
+        },
+        minLength: {
+          value: 8,
+          message: "Mobile number must be at least 8 digits",
+        },
+      },
+      autoComplete: "tel",
+    },
+    {
+      name: "new_password",
+      label: "Password",
+      type: "password" as const,
+      placeholder: "Create a password",
+      required: true,
+      validation: {
+        required: "Password is required",
+        minLength: {
+          value: 8,
+          message: "Password must be at least 8 characters",
+        },
+      },
+      autoComplete: "new-password",
     },
   ];
 
@@ -86,23 +108,18 @@ export function CreateUser({}: {}) {
   const { mutate: globalMutate } = useSWRConfig();
 
   const onSubmitRowData = (addedUser: z.infer<typeof userSchema>) => {
-    const {
-      name,
-      email,
-      first_name,
-      last_name,
-      full_name,
-      enabled,
-      user_type,
-    } = addedUser;
+    const { first_name, last_name, email, mobile_no, new_password } = addedUser;
 
     createDoc("User", {
       email,
       first_name,
       last_name,
-      full_name,
-      enabled,
-      user_type,
+      full_name: `${first_name} ${last_name}`.trim(),
+      mobile_no,
+      new_password,
+      send_welcome_email: 0, // Don't send welcome email as we're setting the password
+      enabled: 1, // Enable the user by default
+      user_type: "System User", // Set default user type
     })
       .then(() => {
         console.log(`User ${name} created successfully`);
@@ -115,42 +132,23 @@ export function CreateUser({}: {}) {
 
   return (
     <div className="cursor-pointer whitespace-normal px-2 line-clamp-2 line-break-anywhere">
-      <Drawer direction={isMobile ? "bottom" : "right"}>
-        <DrawerTrigger asChild>
-          <Button
-            variant="link"
-            className="text-foreground w-fit px-0 whitespace-normal text-left"
-          >
-            Create User
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader className="gap-1">
-            <DrawerTitle>Create User</DrawerTitle>
-          </DrawerHeader>
-          <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-            <Form
-              form={UserForm}
-              fields={formFields}
-              onSubmit={(data) => onSubmitRowData(data)}
-              submitText="Save Changes"
-              cancelText="Cancel"
-              footer={
-                <DrawerFooter className="px-0">
-                  <Button type="submit" className="w-full">
-                    Save Changes
-                  </Button>
-                  <DrawerClose asChild>
-                    <Button type="button" variant="outline" className="w-full">
-                      Cancel
-                    </Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              }
-            />
-          </div>
-        </DrawerContent>
-      </Drawer>
+      <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
+        <Form
+          form={UserForm}
+          fields={formFields}
+          onSubmit={(data) => onSubmitRowData(data)}
+          footer={
+            <>
+              <Button type="submit" className="w-full">
+                Save Changes
+              </Button>
+              <Button type="button" variant="outline" className="w-full">
+                Cancel
+              </Button>
+            </>
+          }
+        />
+      </div>
     </div>
   );
 }

@@ -11,6 +11,8 @@ import {
   IconReport,
   IconSearch,
   IconSettings,
+  IconStorm,
+  IconUser,
 } from "@tabler/icons-react";
 import * as React from "react";
 
@@ -29,7 +31,9 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 
+import { IconChecklist } from "@tabler/icons-react";
 import { useFrappeAuth } from "frappe-react-sdk";
+import { Calendar, Notebook, Phone } from "lucide-react";
 
 const data = {
   user: {
@@ -47,6 +51,46 @@ const data = {
       title: "Operations",
       url: "/operations",
       icon: IconMap,
+    },
+    {
+      title: "Leads",
+      url: "/leads",
+      icon: IconUser,
+    },
+    {
+      title: "Customers",
+      url: "/customers",
+      icon: IconStorm,
+    },
+    {
+      title: "Contacts",
+      url: "/contacts",
+      icon: Calendar,
+    },
+    {
+      title: "Organisations",
+      url: "/organisations",
+      icon: IconUser,
+    },
+    {
+      title: "Settings",
+      url: "/settings",
+      icon: IconSettings,
+    },
+    {
+      title: "Notes",
+      url: "/notes",
+      icon: Notebook,
+    },
+    {
+      title: "Tasks",
+      url: "/tasks",
+      icon: IconChecklist,
+    },
+    {
+      title: "Calllogs",
+      url: "/calllogs",
+      icon: Phone,
     },
   ],
   navClouds: [
