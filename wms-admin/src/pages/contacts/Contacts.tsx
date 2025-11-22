@@ -56,6 +56,20 @@ export default function Page() {
       autoComplete: "name",
     },
     {
+      name: "email",
+      label: "Email",
+      type: "email",
+      placeholder: "user@example.com",
+      required: true,
+      validation: {
+        required: "Email is required",
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: "Invalid email address",
+        },
+      },
+    },
+    {
       name: "user_type",
       label: "User Type",
       type: "select",
@@ -98,7 +112,14 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader PageName="Contacts" />
+        <SiteHeader
+          PageName="Contacts"
+          docType="User"
+          formSchema={userSchema}
+          keycolumn="email"
+          cacheKey="users_list"
+          formFields={formFields}
+        />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">

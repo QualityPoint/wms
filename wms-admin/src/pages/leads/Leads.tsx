@@ -99,7 +99,14 @@ export default function Page() {
     >
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader PageName="Leads" />
+        <SiteHeader
+          PageName="Leads"
+          docType="Lead"
+          formSchema={leadSchema}
+          keycolumn="name"
+          cacheKey="leads_list"
+          formFields={formFields}
+        />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">

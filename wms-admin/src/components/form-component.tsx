@@ -14,6 +14,7 @@ export type FormField = {
     | "password"
     | "number"
     | "tel"
+    | "date"
     | "select"
     | "checkbox"
     | "textarea";

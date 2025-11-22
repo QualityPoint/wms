@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import { IconChecklist } from "@tabler/icons-react";
 import { useFrappeAuth } from "frappe-react-sdk";
 import { Calendar, Notebook, Phone } from "lucide-react";
+import { useEffect } from "react";
 
 const data = {
   user: {
@@ -179,6 +180,52 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { currentUser } = useFrappeAuth();
+
+  const getCurrentUser = async () => {
+    const res = await fetch("/api/method/frappe.auth.get_logged_user");
+    const data = await res.json();
+    return data.message;
+  };
+
+  const getUserRoles = async () => {
+    const user = await getCurrentUser();
+
+    const res = await fetch(`/api/resource/User/${user}?fields=["roles"]`);
+    const data = await res.json();
+
+    return data.data.roles.map((r) => r.role);
+  };
+
+  const getCurrentUserDetails = async () => {
+    // 1) Get logged user ID/email
+    const userRes = await fetch("/api/method/frappe.auth.get_logged_user");
+    const userId = (await userRes.json()).message;
+
+    // 2) Get full User document
+    const userDocRes = await fetch(`/api/resource/User/${userId}`);
+    const userDoc = (await userDocRes.json()).data;
+
+    // 3) Get custom user permissions
+    const permsRes = await fetch(
+      "/api/method/frappe.permissions.get_user_permissions"
+    );
+    const userPerms = (await permsRes.json()).message;
+
+    return {
+      userId,
+      fullName: userDoc.full_name,
+      email: userDoc.email,
+      roles: userDoc.roles?.map((r) => r.role) ?? [],
+      language: userDoc.language,
+      timeZone: userDoc.time_zone,
+      permissions: userPerms,
+      raw: userDoc, // full Frappe user record
+    };
+  };
+
+  useEffect(() => {
+    getCurrentUserDetails().then(console.log);
+  }, []);
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
